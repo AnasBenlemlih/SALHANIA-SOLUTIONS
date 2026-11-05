@@ -1,11 +1,19 @@
 ---
 import Analytics from '@vercel/analytics/astro';
+import { Image } from 'astro:assets';
 import '../styles/global.css';
+import vendingMachineImage from '../assets/services/distribution-automatique.png';
+import officeSuppliesImage from '../assets/services/fournitures-professionnelles.png';
+import workplaceImage from '../assets/services/equipements-espaces-professionnels.png';
+import logisticsImage from '../assets/services/logistique-approvisionnement.png';
+import businessServicesImage from '../assets/services/services-generaux.png';
 
 const services = [
 	{
 		number: '01',
 		title: 'Distribution automatique',
+		image: vendingMachineImage,
+		imageAlt: 'Distributeur de boissons et machine à café dans un espace de pause professionnel.',
 		items: [
 			'Mise à disposition et installation de distributeurs automatiques.',
 			'Distributeurs de boissons chaudes et froides.',
@@ -17,6 +25,8 @@ const services = [
 	{
 		number: '02',
 		title: 'Fournitures et consommables professionnels',
+		image: officeSuppliesImage,
+		imageAlt: 'Fournitures de bureau et produits d’entretien disposés sur un espace de travail.',
 		items: [
 			'Fournitures de bureau et papeterie.',
 			'Produits d’entretien et d’hygiène.',
@@ -28,6 +38,8 @@ const services = [
 	{
 		number: '03',
 		title: 'Équipements et aménagement des espaces professionnels',
+		image: workplaceImage,
+		imageAlt: 'Espace de pause professionnel aménagé avec mobilier et équipements.',
 		items: [
 			'Équipements pour cuisines et espaces de pause.',
 			'Électroménager professionnel et équipements complémentaires.',
@@ -38,6 +50,8 @@ const services = [
 	{
 		number: '04',
 		title: 'Logistique et approvisionnement',
+		image: logisticsImage,
+		imageAlt: 'Cartons rangés dans un espace logistique organisé.',
 		items: [
 			'Gestion des commandes et livraisons.',
 			'Approvisionnement régulier ou ponctuel.',
@@ -48,6 +62,8 @@ const services = [
 	{
 		number: '05',
 		title: 'Services généraux et prestations aux entreprises',
+		image: businessServicesImage,
+		imageAlt: 'Salle de réunion préparée pour accueillir une rencontre professionnelle.',
 		items: [
 			'Assistance aux besoins quotidiens des entreprises.',
 			'Organisation et coordination de prestations.',
@@ -201,17 +217,30 @@ const benefits = [
 					</div>
 					<div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
 						{services.map((service) => (
-							<article class="rounded-2xl border border-slate-200 bg-stone-50 p-6 sm:p-8">
-								<p class="text-sm font-semibold tracking-widest text-teal-800">{service.number}</p>
-								<h3 class="mt-4 text-xl leading-7 font-semibold text-slate-950">{service.title}</h3>
-								<ul class="mt-5 space-y-3 text-sm leading-6 text-slate-600">
-									{service.items.map((item) => (
-										<li class="flex gap-3">
-											<span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-700"></span>
-											<span>{item}</span>
-										</li>
-									))}
-								</ul>
+							<article class="overflow-hidden rounded-2xl border border-slate-200 bg-stone-50 transition hover:-translate-y-1 hover:shadow-lg">
+								<Image
+									src={service.image}
+									alt={service.imageAlt}
+									widths={[320, 480, 640, 960]}
+									sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 100vw"
+									format="webp"
+									quality={80}
+									loading="lazy"
+									decoding="async"
+									class="h-48 w-full object-cover"
+								/>
+								<div class="p-6 sm:p-8">
+									<p class="text-sm font-semibold tracking-widest text-teal-800">{service.number}</p>
+									<h3 class="mt-4 text-xl leading-7 font-semibold text-slate-950">{service.title}</h3>
+									<ul class="mt-5 space-y-3 text-sm leading-6 text-slate-600">
+										{service.items.map((item) => (
+											<li class="flex gap-3">
+												<span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-700"></span>
+												<span>{item}</span>
+											</li>
+										))}
+									</ul>
+								</div>
 							</article>
 						))}
 					</div>
