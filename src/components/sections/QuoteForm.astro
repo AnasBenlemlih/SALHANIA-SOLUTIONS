@@ -1,0 +1,77 @@
+---
+import { quoteTranslations } from '../../i18n/quote';
+import type { PageContent } from '../../i18n/translations';
+interface Props { content: PageContent }
+const { content } = Astro.props;
+const t = quoteTranslations[Astro.url.pathname.startsWith('/en/') ? 'en' : 'fr'];
+---
+
+<form id="quote-form" aria-labelledby="quote-title" class="rounded-2xl border border-slate-700 bg-slate-900 p-6 sm:p-8" data-sending={t.sending} data-success={t.success} data-error={t.error} data-invalid={t.invalid}>
+	<h3 id="quote-title" class="text-2xl font-semibold">{t.title}</h3>
+	<p class="mt-3 text-sm text-slate-300">{t.help}</p>
+	<div class="mt-6 grid gap-5 sm:grid-cols-2">
+		<div><label for="quote-name">{t.name} *</label><input id="quote-name" name="name" required maxlength="100" autocomplete="name" /></div>
+		<div><label for="quote-company">{t.company} *</label><input id="quote-company" name="company" required maxlength="120" autocomplete="organization" /></div>
+		<div><label for="quote-email">{t.email} *</label><input id="quote-email" name="email" type="email" required maxlength="160" autocomplete="email" /></div>
+		<div><label for="quote-phone">{t.phone}</label><input id="quote-phone" name="phone" type="tel" maxlength="40" autocomplete="tel" /></div>
+		<div class="sm:col-span-2"><label for="quote-service">{t.service} *</label><select id="quote-service" name="service" required><option value="">{t.choose}</option>{content.services.items.map(s => <option value={s.image}>{s.title}</option>)}<option value="multiple">{t.multiple}</option></select></div>
+		<div class="sm:col-span-2"><label for="quote-location">{t.location} *</label><input id="quote-location" name="location" required maxlength="150" /></div>
+		<div class="sm:col-span-2"><label for="quote-description">{t.description} *</label><textarea id="quote-description" name="description" rows="5" required maxlength="3000"></textarea></div>
+	</div>
+	<div hidden aria-hidden="true"><label for="quote-website">Website</label><input id="quote-website" name="website" tabindex="-1" autocomplete="off" /></div>
+	<p class="mt-5 text-sm leading-6 text-slate-300">{t.privacy}</p>
+	<button disabled type="submit" class="mt-6 rounded-full bg-teal-400 px-6 py-3 font-semibold text-slate-950 disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-300">{t.submit}</button>
+	<p role="status" aria-live="polite" class="mt-4 text-sm leading-6"></p>
+	<noscript><p>{t.nojs} <a href="mailto:contact@salhania-solutions.fr">contact@salhania-solutions.fr</a></p></noscript>
+</form>
+<style>
+	label { display: block; margin-bottom: .5rem; }
+	input, select, textarea { width: 100%; padding: .75rem; border: 1px solid var(--color-slate-500); border-radius: .5rem; background: var(--color-slate-950); color: white; }
+	input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--color-teal-300); outline-offset: 3px; }
+	textarea { resize: vertical; }
+</style>
+<script>
+	const form = document.querySelector<HTMLFormElement>('#quote-form');
+	const button = form?.querySelector<HTMLButtonElement>('button');
+	const status = form?.querySelector<HTMLParagraphElement>('[role="status"]');
+	if (form && button && status) {
+		button.disabled = false;
+		let requestId = crypto.randomUUID();
+		let pending = false;
+		form.addEventListener('input', () => { requestId = crypto.randomUUID(); });
+		form.addEventListener('submit', async event => {
+			event.preventDefault();
+			if (pending || !form.reportValidity()) return;
+			const data = Object.fromEntries(new FormData(form));
+			if (Object.entries(data).some(([key, value]) => key !== 'phone' && key !== 'website' && !String(value).trim())) {
+				status.textContent = form.dataset.invalid!;
+				return;
+			}
+			pending = true;
+			button.disabled = true;
+			const fieldset = Array.from(form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>('input, textarea, select'));
+			fieldset.forEach(field => { field.disabled = true; });
+			status.textContent = form.dataset.sending!;
+			try {
+				const response = await fetch('/api/quote', {
+					method: 'POST', headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ ...data, requestId }), signal: AbortSignal.timeout(15000),
+				});
+				const result: unknown = await response.json();
+				if (!response.ok || typeof result !== 'object' || result === null || !('code' in result) || result.code !== 'accepted') {
+					status.textContent = response.status === 400 ? form.dataset.invalid! : form.dataset.error!;
+				} else {
+					status.textContent = form.dataset.success!;
+					form.reset();
+					requestId = crypto.randomUUID();
+				}
+			} catch {
+				status.textContent = form.dataset.error!;
+			} finally {
+				pending = false;
+				button.disabled = false;
+				fieldset.forEach(field => { field.disabled = false; });
+			}
+		});
+	}
+</script>

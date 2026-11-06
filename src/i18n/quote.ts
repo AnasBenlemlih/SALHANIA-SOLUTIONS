@@ -1,0 +1,28 @@
+export const quoteTranslations = {
+	fr: {
+		title: 'Demander un devis', name: 'Nom et prénom', company: 'Entreprise',
+		email: 'E-mail', phone: 'Téléphone (facultatif)', service: 'Service recherché',
+		choose: 'Choisir un service', multiple: 'Plusieurs services',
+		location: 'Ville et code postal', description: 'Description du besoin',
+		help: 'Les champs marqués * sont obligatoires. Description : 3 000 caractères maximum.',
+		privacy: 'Les informations seront transmises à SALHANIA SOLUTIONS pour répondre à votre demande. N’incluez pas de données sensibles.',
+		submit: 'Envoyer ma demande', sending: 'Envoi en cours…',
+		success: 'Votre demande a été acceptée par notre service d’envoi. La livraison de l’e-mail reste soumise au service de messagerie.',
+		error: 'Envoi non confirmé. Réessayez ou contactez-nous directement par e-mail.',
+		invalid: 'Veuillez vérifier les champs obligatoires et leur longueur.',
+		nojs: 'Activez JavaScript pour envoyer le formulaire, ou utilisez notre adresse e-mail.',
+	},
+	en: {
+		title: 'Request a quote', name: 'Full name', company: 'Company',
+		email: 'Email', phone: 'Phone (optional)', service: 'Required service',
+		choose: 'Choose a service', multiple: 'Multiple services',
+		location: 'City and postal code', description: 'Describe your needs',
+		help: 'Fields marked * are required. Description: maximum 3,000 characters.',
+		privacy: 'Your information will be sent to SALHANIA SOLUTIONS to respond to your request. Do not include sensitive data.',
+		submit: 'Send my request', sending: 'Sending…',
+		success: 'Your request has been accepted by our email sending service. Email delivery remains subject to the mail service.',
+		error: 'Sending could not be confirmed. Try again or contact us directly by email.',
+		invalid: 'Please check the required fields and their length.',
+		nojs: 'Enable JavaScript to submit this form, or use our email address.',
+	},
+};

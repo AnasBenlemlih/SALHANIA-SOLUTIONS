@@ -13,11 +13,38 @@ Site vitrine statique construit avec Astro, TypeScript et Tailwind CSS 4.
 npm ci
 npm run dev
 npm run check
+npm test
 npm run build
 npm run preview
 ```
 
-Le build de production est généré dans `dist/`. Le site est configuré pour un déploiement statique sur Cloudflare Pages.
+Le build de production est généré dans `dist/`. Les pages restent statiques sur Vercel ;
+la fonction `api/quote.ts` transmet les demandes de devis via Resend.
+
+## Demandes de devis
+
+Configurer dans Vercel, uniquement côté serveur : `RESEND_API_KEY`,
+`QUOTE_FROM_EMAIL` (adresse du domaine vérifié dans Resend) et
+`QUOTE_TO_EMAIL=contact@salhania-solutions.fr`. Ne pas préfixer ces variables par
+`PUBLIC_` ni les enregistrer dans Git. Redéployer après configuration.
+
+Avant de publier, configurer Vercel Firewall pour limiter les requêtes POST sur
+`/api/quote` par IP (par exemple 5 par minute, à ajuster), avec blocage des abus.
+Cette règle nécessite la disponibilité de la fonctionnalité sur votre offre.
+Le champ piège et la validation serveur ne remplacent pas cette limite.
+Ne pas utiliser un compteur en mémoire : les fonctions peuvent avoir plusieurs instances.
+
+Le formulaire FR/EN conserve les données en cas d'échec, empêche les doubles clics
+et réutilise une clé d'idempotence lors d'une nouvelle tentative sans modification.
+La confirmation signifie acceptation par Resend, pas livraison garantie.
+Le destinataire est fixé côté serveur ; Répondre utilise l'adresse du prospect.
+La messagerie directe reste disponible en alternative.
+
+`astro dev` et `astro preview` ne servent pas les fonctions Vercel :
+tester l'envoi sur un déploiement Preview avec ses variables configurées, ou avec
+`vercel dev`. Vérifier réception, indésirables et adresse de réponse avant production.
+Compléter la politique de confidentialité avec les informations réelles de traitement
+et de conservation avant ouverture publique.
 
 ## Mesure des performances sur Vercel
 
