@@ -1,6 +1,7 @@
 ---
 import Analytics from '@vercel/analytics/astro';
 import SpeedInsights from '@vercel/speed-insights/astro';
+import FlagIcon from '../components/FlagIcon.astro';
 import '../styles/global.css';
 import type { Locale, PageContent } from '../i18n/translations';
 
@@ -79,7 +80,7 @@ const otherLocaleTag = otherLocale === 'fr' ? 'fr_FR' : 'en_US';
 						locale === 'fr' ? (
 							<>
 								<span lang="fr" aria-current="page" class="font-semibold text-slate-950">
-									<span aria-hidden="true">🇫🇷</span> FR
+									<FlagIcon country="fr" /> FR
 								</span>
 								<span aria-hidden="true" class="text-slate-400">
 									/
@@ -91,7 +92,7 @@ const otherLocaleTag = otherLocale === 'fr' ? 'fr_FR' : 'en_US';
 									aria-label="English"
 									class="rounded-sm text-slate-600 underline-offset-4 transition hover:text-teal-800 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
 								>
-									<span aria-hidden="true">🇬🇧</span> EN
+									<FlagIcon country="uk" /> EN
 								</a>
 							</>
 						) : (
@@ -103,13 +104,13 @@ const otherLocaleTag = otherLocale === 'fr' ? 'fr_FR' : 'en_US';
 									aria-label="Français"
 									class="rounded-sm text-slate-600 underline-offset-4 transition hover:text-teal-800 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
 								>
-									<span aria-hidden="true">🇫🇷</span> FR
+									<FlagIcon country="fr" /> FR
 								</a>
 								<span aria-hidden="true" class="text-slate-400">
 									/
 								</span>
 								<span lang="en" aria-current="page" class="font-semibold text-slate-950">
-									<span aria-hidden="true">🇬🇧</span> EN
+									<FlagIcon country="uk" /> EN
 								</span>
 							</>
 						)
