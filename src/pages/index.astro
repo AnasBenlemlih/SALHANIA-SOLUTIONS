@@ -1,5 +1,6 @@
 ---
 import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 import { Image } from 'astro:assets';
 import '../styles/global.css';
 import vendingMachineImage from '../assets/services/distribution-automatique.png';
@@ -295,5 +296,6 @@ const benefits = [
 			</div>
 		</footer>
 		<Analytics />
+		<SpeedInsights />
 	</body>
 </html>

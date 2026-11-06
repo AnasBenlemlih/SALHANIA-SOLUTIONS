@@ -19,6 +19,13 @@ npm run preview
 
 Le build de production est généré dans `dist/`. Le site est configuré pour un déploiement statique sur Cloudflare Pages.
 
+## Mesure des performances sur Vercel
+
+La page d'accueil intègre Vercel Analytics et Speed Insights. Activer Speed Insights
+dans le tableau de bord du projet Vercel, puis redéployer le site pour collecter
+les mesures de performance des visiteurs. Les bloqueurs de contenu peuvent
+empêcher la collecte.
+
 ## Organisation
 
 - `src/pages/` : pages routées par Astro.
