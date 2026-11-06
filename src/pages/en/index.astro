@@ -1,0 +1,9 @@
+---
+import HomePage from '../../components/HomePage.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { translations } from '../../i18n/translations';
+---
+
+<SiteLayout content={translations.en} locale="en">
+	<HomePage content={translations.en} />
+</SiteLayout>

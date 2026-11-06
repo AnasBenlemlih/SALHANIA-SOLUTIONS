@@ -1,0 +1,170 @@
+---
+import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
+import '../styles/global.css';
+import type { Locale, PageContent } from '../i18n/translations';
+
+interface Props {
+	content: PageContent;
+	locale: Locale;
+}
+
+const { content, locale } = Astro.props;
+const otherLocale: Locale = locale === 'fr' ? 'en' : 'fr';
+const canonicalPath = locale === 'fr' ? '/' : '/en/';
+const localizedPaths: Record<string, Partial<Record<Locale, string>>> = {
+	'/': { fr: '/', en: '/en/' },
+	'/en/': { fr: '/', en: '/en/' },
+};
+const homepageByLocale: Record<Locale, string> = {
+	fr: '/',
+	en: '/en/',
+};
+const otherLocalePath =
+	localizedPaths[Astro.url.pathname]?.[otherLocale] ?? homepageByLocale[otherLocale];
+const canonicalUrl = new URL(canonicalPath, Astro.site).href;
+const frenchUrl = new URL('/', Astro.site).href;
+const englishUrl = new URL('/en/', Astro.site).href;
+const localeTag = locale === 'fr' ? 'fr_FR' : 'en_US';
+const otherLocaleTag = otherLocale === 'fr' ? 'fr_FR' : 'en_US';
+---
+
+<!doctype html>
+<html lang={locale}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{content.seo.title}</title>
+		<meta name="description" content={content.seo.description} />
+		<link rel="canonical" href={canonicalUrl} />
+		<link rel="alternate" hreflang="fr" href={frenchUrl} />
+		<link rel="alternate" hreflang="en" href={englishUrl} />
+		<link rel="alternate" hreflang="x-default" href={frenchUrl} />
+		<link rel="sitemap" href="/sitemap-index.xml" />
+		<meta name="robots" content="index, follow" />
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content={localeTag} />
+		<meta property="og:locale:alternate" content={otherLocaleTag} />
+		<meta property="og:site_name" content="SALHANIA SOLUTIONS" />
+		<meta property="og:title" content={content.seo.title} />
+		<meta property="og:description" content={content.seo.description} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={content.seo.title} />
+		<meta name="twitter:description" content={content.seo.description} />
+	</head>
+	<body class="bg-stone-50 text-slate-900 antialiased">
+		<a
+			href="#contenu"
+			class="sr-only z-50 rounded-md bg-white p-3 text-slate-950 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+		>
+			{content.skipLink}
+		</a>
+
+		<header class="border-b border-slate-200 bg-white">
+			<div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-3 px-5 py-4 sm:flex-nowrap sm:px-8 sm:py-5">
+				<a
+					href={locale === 'fr' ? '/' : '/en/'}
+					class="text-lg font-bold tracking-tight text-slate-900"
+					aria-label={content.homeLabel}
+				>
+					SALHANIA <span class="text-teal-700">SOLUTIONS</span>
+				</a>
+				<nav
+					aria-label={content.languageSelector}
+					class="order-3 flex w-full items-center justify-center gap-2 text-sm font-medium sm:order-none sm:w-auto"
+				>
+					{
+						locale === 'fr' ? (
+							<>
+								<span lang="fr" aria-current="page" class="font-semibold text-slate-950">
+									<span aria-hidden="true">🇫🇷</span> FR
+								</span>
+								<span aria-hidden="true" class="text-slate-400">
+									/
+								</span>
+								<a
+									lang="en"
+									href={otherLocalePath}
+									data-language-switch
+									aria-label="English"
+									class="rounded-sm text-slate-600 underline-offset-4 transition hover:text-teal-800 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+								>
+									<span aria-hidden="true">🇬🇧</span> EN
+								</a>
+							</>
+						) : (
+							<>
+								<a
+									lang="fr"
+									href={otherLocalePath}
+									data-language-switch
+									aria-label="Français"
+									class="rounded-sm text-slate-600 underline-offset-4 transition hover:text-teal-800 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+								>
+									<span aria-hidden="true">🇫🇷</span> FR
+								</a>
+								<span aria-hidden="true" class="text-slate-400">
+									/
+								</span>
+								<span lang="en" aria-current="page" class="font-semibold text-slate-950">
+									<span aria-hidden="true">🇬🇧</span> EN
+								</span>
+							</>
+						)
+					}
+				</nav>
+				<nav
+					aria-label={content.navigation.label}
+					class="hidden items-center gap-8 text-sm font-medium text-slate-600 sm:flex"
+				>
+					<a class="transition hover:text-teal-800" href="#services">
+						{content.navigation.services}
+					</a>
+					<a class="transition hover:text-teal-800" href="#engagements">
+						{content.navigation.commitments}
+					</a>
+					<a
+						class="rounded-full bg-slate-900 px-5 py-2.5 text-white transition hover:bg-teal-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+						href="#contact"
+					>
+						{content.navigation.contact}
+					</a>
+				</nav>
+				<a
+					class="rounded-full bg-slate-900 px-4 py-2.5 text-sm font-medium text-white sm:hidden"
+					href="#contact"
+				>
+					{content.navigation.mobileContact}
+				</a>
+			</div>
+		</header>
+
+		<slot />
+
+		<footer class="border-t border-slate-800 bg-slate-950 text-slate-300">
+			<div class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm sm:px-8 md:flex-row md:items-center md:justify-between">
+				<p class="font-semibold text-white">SALHANIA SOLUTIONS</p>
+				<a class="transition hover:text-teal-300" href="mailto:contact@salhania-solutions.fr">
+					contact@salhania-solutions.fr
+				</a>
+			</div>
+		</footer>
+		<Analytics />
+		<SpeedInsights />
+
+		<script>
+			for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-language-switch]')) {
+				link.addEventListener('click', () => {
+					const hash = window.location.hash;
+					if (!hash || !document.getElementById(hash.slice(1))) return;
+
+					const target = new URL(link.href);
+					target.hash = hash;
+					link.href = target.href;
+				});
+			}
+		</script>
+	</body>
+</html>

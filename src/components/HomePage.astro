@@ -1,0 +1,157 @@
+---
+import { Image } from 'astro:assets';
+import businessServicesImage from '../assets/services/services-generaux.png';
+import vendingMachineImage from '../assets/services/distribution-automatique.png';
+import officeSuppliesImage from '../assets/services/fournitures-professionnelles.png';
+import workplaceImage from '../assets/services/equipements-espaces-professionnels.png';
+import logisticsImage from '../assets/services/logistique-approvisionnement.png';
+import type { PageContent, ServiceImageKey } from '../i18n/translations';
+
+interface Props {
+	content: PageContent;
+}
+
+const { content } = Astro.props;
+const serviceImages = {
+	vending: vendingMachineImage,
+	supplies: officeSuppliesImage,
+	workplace: workplaceImage,
+	logistics: logisticsImage,
+	businessServices: businessServicesImage,
+} satisfies Record<ServiceImageKey, typeof vendingMachineImage>;
+---
+
+<main id="contenu">
+	<section class="relative isolate overflow-hidden bg-slate-950 text-white">
+		<div class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-teal-800/50 via-slate-950 to-slate-950"></div>
+		<div class="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32 lg:py-40">
+			<p class="text-sm font-semibold tracking-[0.18em] text-teal-300 uppercase">
+				{content.hero.eyebrow}
+			</p>
+			<h1 class="mt-6 max-w-4xl text-4xl leading-tight font-semibold tracking-tight sm:text-6xl lg:text-7xl">
+				{content.hero.title}
+			</h1>
+			<p class="mt-7 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
+				{content.hero.tagline}
+			</p>
+			<p class="mt-5 max-w-3xl leading-7 text-slate-300">{content.hero.description}</p>
+			<div class="mt-9 flex flex-col gap-4 sm:flex-row">
+				<a
+					class="inline-flex items-center justify-center rounded-full bg-teal-400 px-6 py-3 font-semibold text-slate-950 transition hover:bg-teal-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-300"
+					href="#services"
+				>
+					{content.hero.servicesLink}
+				</a>
+				<a
+					class="inline-flex items-center justify-center rounded-full border border-white/30 px-6 py-3 font-semibold text-white transition hover:border-white hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+					href="mailto:contact@salhania-solutions.fr"
+				>
+					{content.hero.contactLink}
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
+		<div class="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+			<div>
+				<p class="text-sm font-semibold tracking-[0.16em] text-teal-800 uppercase">
+					{content.introduction.eyebrow}
+				</p>
+				<h2 class="mt-4 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+					{content.introduction.title}
+				</h2>
+			</div>
+			<div class="space-y-5 text-lg leading-8 text-slate-600">
+				{content.introduction.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+			</div>
+		</div>
+	</section>
+
+	<section id="services" class="scroll-mt-8 bg-white py-20 sm:py-28">
+		<div class="mx-auto max-w-7xl px-5 sm:px-8">
+			<div class="max-w-2xl">
+				<p class="text-sm font-semibold tracking-[0.16em] text-teal-800 uppercase">
+					{content.services.eyebrow}
+				</p>
+				<h2 class="mt-4 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+					{content.services.title}
+				</h2>
+				<p class="mt-4 leading-7 text-slate-600">{content.services.description}</p>
+			</div>
+			<div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+				{content.services.items.map((service) => (
+					<article class="overflow-hidden rounded-2xl border border-slate-200 bg-stone-50 transition hover:-translate-y-1 hover:shadow-lg">
+						<Image
+							src={serviceImages[service.image]}
+							alt={service.imageAlt}
+							widths={[320, 480, 640, 960]}
+							sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 100vw"
+							format="webp"
+							quality={80}
+							loading="lazy"
+							decoding="async"
+							class="h-48 w-full object-cover"
+						/>
+						<div class="p-6 sm:p-8">
+							<p class="text-sm font-semibold tracking-widest text-teal-800">{service.number}</p>
+							<h3 class="mt-4 text-xl leading-7 font-semibold text-slate-950">{service.title}</h3>
+							<ul class="mt-5 space-y-3 text-sm leading-6 text-slate-600">
+								{service.offerings.map((offering) => (
+									<li class="flex gap-3">
+										<span
+											aria-hidden="true"
+											class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-700"
+										></span>
+										<span>{offering}</span>
+									</li>
+								))}
+							</ul>
+						</div>
+					</article>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<section id="engagements" class="scroll-mt-8 bg-stone-100 py-20 sm:py-28">
+		<div class="mx-auto max-w-7xl px-5 sm:px-8">
+			<div class="max-w-2xl">
+				<p class="text-sm font-semibold tracking-[0.16em] text-teal-800 uppercase">
+					{content.commitments.eyebrow}
+				</p>
+				<h2 class="mt-4 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+					{content.commitments.title}
+				</h2>
+			</div>
+			<div class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+				{content.commitments.items.map((item) => (
+					<article class="border-t-2 border-teal-700 pt-5">
+						<h3 class="text-lg font-semibold text-slate-950">{item.title}</h3>
+						<p class="mt-3 leading-7 text-slate-600">{item.description}</p>
+					</article>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<section id="contact" class="scroll-mt-8 bg-slate-950 text-white">
+		<div class="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-16 sm:px-8 sm:py-20 lg:flex-row lg:items-center lg:justify-between">
+			<div>
+				<p class="text-sm font-semibold tracking-[0.16em] text-teal-300 uppercase">
+					{content.contact.eyebrow}
+				</p>
+				<h2 class="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+					{content.contact.title}
+				</h2>
+				<p class="mt-4 max-w-2xl leading-7 text-slate-300">{content.contact.description}</p>
+			</div>
+			<a
+				class="inline-flex w-fit items-center justify-center rounded-full bg-teal-400 px-6 py-3 font-semibold text-slate-950 transition hover:bg-teal-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-300"
+				href="mailto:contact@salhania-solutions.fr"
+			>
+				contact@salhania-solutions.fr
+			</a>
+		</div>
+	</section>
+</main>
